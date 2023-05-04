@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,12 +79,14 @@ public class BaseController {
   }
   @PostMapping("/uploadCoverImage")
   @ResponseBody
-  public String uploadCoverImage(MultipartFile coverImage,  int bookId) throws IOException {
+  public String uploadCoverImage(MultipartFile coverImage,  int bookId) throws IOException,SQLException {
     Map<String,String> res = new HashMap<>();
+
     if (coverImage.isEmpty()){
-      res.put("msg","未选择封面图片");
-      return JSON.toJSONString(res);
+      throw new SQLException("封面图片为空，执行SQL异常");
     }
+
+
     // 保存图片，路径d:\imgs\源名字
     String basePath="D:\\imgs\\";
     log.debug("源文件名称："+coverImage.getOriginalFilename());
@@ -91,6 +94,7 @@ public class BaseController {
 
     coverImage.transferTo(new File(coverImageUrl));
     bookDao.upDateCoverImageUrl(bookId, coverImageUrl);
+
     res.put("imageUrl", coverImageUrl);
     return JSON.toJSONString(res);
   }
