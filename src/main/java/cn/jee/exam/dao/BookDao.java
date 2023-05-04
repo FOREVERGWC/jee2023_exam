@@ -11,4 +11,6 @@ import java.util.List;
 @Repository
 public interface BookDao extends JpaRepository<Book, Integer>, JpaSpecificationExecutor<Book> {
   List<Book> getBooksByCategoryId(Integer categoryId);
+
+
 }

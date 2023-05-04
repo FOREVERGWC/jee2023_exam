@@ -39,4 +39,10 @@ public class Book {
     this.profile = profile;
     this.coverImageUrl = coverImageUrl;
   }
+
+  public Book(String bookName, Double price, String profile) {
+    this.bookName = bookName;
+    this.price = price;
+    this.profile = profile;
+  }
 }
