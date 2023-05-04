@@ -2,6 +2,7 @@ package cn.jee.exam.controller;
 
 import cn.jee.exam.bean.Book;
 import cn.jee.exam.bean.Category;
+import cn.jee.exam.bean.Reader;
 import cn.jee.exam.dao.BookDao;
 import cn.jee.exam.dao.CategoryDao;
 import cn.jee.exam.dao.ReaderDao;

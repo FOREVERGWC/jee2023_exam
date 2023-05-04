@@ -13,7 +13,6 @@
       <td>价格</td>
       <td>简介</td>
       <td></td>
-      <td></td>
     </tr>
     </thead>
     <tbody>
@@ -23,7 +22,11 @@
       <td th:text="${book.price}"></td>
       <td th:text="${book.profile}"></td>
       <td><a th:href="@{/toUploadCoverImage(bookId=${book.id})}">上传封面图片</a></td>
-      <td><a th:href="@{/bookReaders(bookId=${book.id})}">借阅过该书的读者</a></td>
+
+      <div th:each="reader:${book.readers}">
+        <td><a th:href="@{/readHistory(readerId=${reader.id})}" th:text="${reader.name}"></a></td>
+      </div>
+
     </tr>
     </tbody>
   </table>

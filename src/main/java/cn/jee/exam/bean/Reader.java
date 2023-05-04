@@ -21,7 +21,7 @@ public class Reader {
 
   @ManyToMany(mappedBy = "readers")
   @ToString.Exclude
-  private List<Book> performers = new ArrayList<>();
+  private List<Book> books = new ArrayList<>();
 
   public Reader(String name) {
     this.name = name;
