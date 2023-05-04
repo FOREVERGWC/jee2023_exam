@@ -82,7 +82,7 @@ public class BaseController {
       res.put("msg","未选择封面图片");
       return JSON.toJSONString(res);
     }
-    // 保存图片，路径d:\imgs\{bookId}.png
+    // 保存图片，路径d:\imgs\源名字
     String basePath="D:\\imgs\\";
     log.debug("源文件名称："+coverImage.getOriginalFilename());
     String coverImageUrl = basePath+coverImage.getOriginalFilename();
