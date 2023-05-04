@@ -2,9 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>$Title$</title>
+  <title>上传封面图片</title>
 </head>
 <body>
-$END$
+  <form action="/uploadCoverImage" method="post" enctype="multipart/form-data">
+    <input type="text" name="bookId" th:value="${bookId}" style="display: none">
+    <input type="file" name="coverImage" value="选择文件">
+    <br><br>
+    <input type="submit" value="提交">
+  </form>
 </body>
 </html>

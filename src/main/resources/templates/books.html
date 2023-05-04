@@ -22,8 +22,8 @@
       <td th:text="${book.bookName}"></td>
       <td th:text="${book.price}"></td>
       <td th:text="${book.profile}"></td>
-      <td><a th:href="@{/listBooks(categoryId=${book.id})}">上传封面图片</a></td>
-      <td><a th:href="@{/toAddBook(categoryId=${book.id})}">借阅过该书的读者</a></td>
+      <td><a th:href="@{/toUploadCoverImage(bookId=${book.id})}">上传封面图片</a></td>
+      <td><a th:href="@{/bookReaders(bookId=${book.id})}">借阅过该书的读者</a></td>
     </tr>
     </tbody>
   </table>

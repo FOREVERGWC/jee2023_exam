@@ -6,17 +6,26 @@ import cn.jee.exam.dao.BookDao;
 import cn.jee.exam.dao.CategoryDao;
 import cn.jee.exam.dao.ReaderDao;
 import cn.jee.exam.validator.BookValidation;
+import com.alibaba.fastjson2.JSON;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
+@Slf4j
 public class BaseController {
   @Autowired
   CategoryDao categoryDao;
@@ -59,4 +68,29 @@ public class BaseController {
       return "error";
     }
   }
+
+  @RequestMapping("/toUploadCoverImage")
+  public String toUploadCoverImage(Model model, Integer bookId){
+    model.addAttribute("bookId", bookId);
+    return "upLoadCoverImage";
+  }
+  @PostMapping("/uploadCoverImage")
+  @ResponseBody
+  public String uploadCoverImage(MultipartFile coverImage,  int bookId) throws IOException {
+    Map<String,String> res = new HashMap<>();
+    if (coverImage.isEmpty()){
+      res.put("msg","未选择封面图片");
+      return JSON.toJSONString(res);
+    }
+    // 保存图片，路径d:\imgs\{bookId}.png
+    String basePath="D:\\imgs\\";
+    log.debug("源文件名称："+coverImage.getOriginalFilename());
+    String coverImageUrl = basePath+coverImage.getOriginalFilename();
+
+    coverImage.transferTo(new File(coverImageUrl));
+    bookDao.upDateCoverImageUrl(bookId, coverImageUrl);
+    res.put("imageUrl", coverImageUrl);
+    return JSON.toJSONString(res);
+  }
+
 }
