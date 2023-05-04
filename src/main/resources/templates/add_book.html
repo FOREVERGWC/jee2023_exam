@@ -13,7 +13,7 @@
   <form action="/addBook" method="post" th:object="${bookValidation}">
     <input type="text" th:field="*{categoryId}" th:value="${categoryId}" style="display: none">
     <input type="text" th:field="*{bookName}" placeholder="图书名称"><br>
-    <input type="number" th:field="*{price}" placeholder="图书价格"><br>
+    <input type="number" step="0.01" th:field="*{price}" placeholder="图书价格"><br>
     <input type="text" th:field="*{profile}" placeholder="图书简介"><br>
     <p th:if="${#fields.hasErrors('profile')}" th:errors="*{profile}" th:errorclass="error"></p>
     <input type="submit" value="提交">&nbsp;&nbsp;&nbsp;<input type="reset" value="重置">

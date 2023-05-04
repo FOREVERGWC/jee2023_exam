@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Controller
 @Slf4j
@@ -94,4 +95,16 @@ public class BaseController {
     return JSON.toJSONString(res);
   }
 
+  @RequestMapping("/readHistory")
+  @ResponseBody
+  public String readHistory(Integer readerId){
+    Map<Integer,String> categoryMap = new HashMap<>(8);
+    Reader reader = readerDao.findById(readerId).orElse(new Reader());
+    for (Book book : reader.getBooks()) {
+      if (!categoryMap.containsKey(book.getCategory().getId())){
+        categoryMap.put(book.getCategory().getId(),book.getCategory().getCategoryName());
+      }
+    }
+    return JSON.toJSONString(categoryMap);
+  }
 }
