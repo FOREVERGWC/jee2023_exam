@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+  <table border="1">
+    <thead>
+    <tr>
+      <td>图书编号</td>
+      <td>书名</td>
+      <td>价格</td>
+      <td>简介</td>
+      <td></td>
+      <td></td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="book:${books}">
+      <td th:text="${book.id}"></td>
+      <td th:text="${book.bookName}"></td>
+      <td th:text="${book.price}"></td>
+      <td th:text="${book.profile}"></td>
+      <td><a th:href="@{/listBooks(categoryId=${book.id})}">上传封面图片</a></td>
+      <td><a th:href="@{/toAddBook(categoryId=${book.id})}">借阅过该书的读者</a></td>
+    </tr>
+    </tbody>
+  </table>
+</body>
+</html>
