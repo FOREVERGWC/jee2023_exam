@@ -1,0 +1,42 @@
+debug: true
+
+spring:
+  output:
+    ansi:
+      enabled: always
+  mvc:
+    log-request-details: true
+  datasource:
+    driver-class-name: org.hsqldb.jdbc.JDBCDriver
+    url: jdbc:hsqldb:file:C:\\Users\\FOREVERGWC\\IdeaProjects\\jee2023_exam\\db\\
+    username: sa
+    password:
+  web:
+    resources:
+      static-locations: classpath:/static/
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+
+logging:
+  level:
+    cn:
+      jee:
+        exam: debug
+    org:
+      springframework: debug
+      hibernate:
+        sql: debug
+        jdbc:
+          bind: trace
+    web: trace
+
+
+upload:
+  path: C:\\imgs\\

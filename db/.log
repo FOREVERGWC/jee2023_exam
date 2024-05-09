@@ -1,6 +1,13 @@
 /*C12*/SET SCHEMA PUBLIC
-DELETE FROM BOOK WHERE ID=3
-INSERT INTO BOOK VALUES(3,'javaweb','D:\imgs\Hello\uff0cworld\uff01.png',9.0E0,'web\u6280\u672fweb\u6280\u672fweb\u6280\u672fweb\u6280\u672fweb\u6280\u672fweb\u6280\u672fweb\u6280\u672fweb\u6280\u672fweb\u6280\u672f',1)
+\u000d\u000a    create table reader_books (\u000d\u000a       readers_id integer not null,\u000d\u000a        books_id integer not null\u000d\u000a    )
+\u000d\u000a    alter table reader_books \u000d\u000a       add constraint FKby53g8krnpdfjhww1nf8go4l3 \u000d\u000a       foreign key (books_id) \u000d\u000a       references book
+\u000d\u000a    alter table reader_books \u000d\u000a       add constraint FK2y10r0t07h0me3o8exqgwh3yv \u000d\u000a       foreign key (readers_id) \u000d\u000a       references reader
+INSERT INTO READER_BOOKS VALUES(2,1)
+INSERT INTO READER_BOOKS VALUES(2,3)
+INSERT INTO READER_BOOKS VALUES(2,5)
+COMMIT
+INSERT INTO READER_BOOKS VALUES(1,1)
+INSERT INTO READER_BOOKS VALUES(1,2)
 COMMIT
 DISCONNECT
 /*C13*/SET SCHEMA PUBLIC

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>读者列表</title>
+  <link rel="stylesheet" th:href="@{/js/lib-master/theme-chalk/index.css}">
+</head>
+<body>
+<div id="app">
+  <el-row :gutter="20">
+    <el-col :span="8">
+      <el-input v-model="queryForm.id" clearable placeholder="读者ID"></el-input>
+    </el-col>
+    <el-col :span="8">
+      <el-input v-model="queryForm.name" clearable placeholder="姓名"></el-input>
+    </el-col>
+    <el-col :span="8">
+      <el-button @click="getReaderList">查询</el-button>
+      <el-button type="primary" @click="showAdd">添加</el-button>
+    </el-col>
+  </el-row>
+  <el-table :data="readerList" current-row-key="id" highlight-current-row size="small" stripe>
+    <el-table-column align="center" label="读者ID" prop="id"></el-table-column>
+    <el-table-column align="center" label="姓名" prop="name"></el-table-column>
+    <el-table-column align="center" label="图书列表">
+      <template v-slot="scope">
+        <el-tree :data="scope.row.books" :props="defaultProps"></el-tree>
+      </template>
+    </el-table-column>
+    <el-table-column align="center" label="操作">
+      <template v-slot="scope">
+        <el-button size="mini" type="primary" @click="showEdit(scope.row.id)">编辑</el-button>
+        <el-popconfirm :title="'是否删除ID为' + scope.row.id + '的数据项？'" @confirm="handleDelete(scope.row.id)">
+          <el-button slot="reference" size="mini" type="danger">删除</el-button>
+        </el-popconfirm>
+      </template>
+    </el-table-column>
+  </el-table>
+  <el-dialog :title="addOrEditForm.title" :visible.sync="addOrEditForm.visible">
+    <el-form ref="addOrEditRef" :model="addOrEditForm.data" :rules="addOrEditRules" label-position="right"
+             label-width="80px">
+      <el-form-item label="姓名" prop="name">
+        <el-input v-model="addOrEditForm.data.name"></el-input>
+      </el-form-item>
+      <el-form-item label="已读书籍" prop="bookIds">
+        <el-select v-model="addOrEditForm.data.bookIds" clearable multiple placeholder="请选择已读书籍"
+                   style="width: 100%">
+          <el-option v-for="item in bookList" :key="item.id" :label="item.name"
+                     :value="item.id"></el-option>
+        </el-select>
+      </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="addOrEditForm.visible = false">取消</el-button>
+      <el-button type="primary" @click="handleSubmit">确定</el-button>
+    </div>
+  </el-dialog>
+</div>
+</body>
+<script th:src="@{js/vue.min.js}"></script>
+<script th:src="@{js/lib-master/index.js}"></script>
+<script th:src="@{js/axios.min.js}"></script>
+<script>
+  const vue = new Vue({
+    el: '#app',
+    data() {
+      return {
+        queryForm: {
+          pageNo: 1,
+          pageSize: 10,
+          id: null,
+          name: ''
+        },
+        addOrEditForm: {
+          title: '',
+          visible: false,
+          data: {
+            id: null,
+            name: '',
+            bookIds: []
+          }
+        },
+        addOrEditRules: {
+          name: [{required: true, message: '姓名为必填项', trigger: 'blur'}]
+        },
+        readerList: [],
+        bookList: [],
+        total: 0,
+        defaultProps: {
+          children: 'children',
+          label: 'name'
+        }
+      }
+    },
+    created() {
+      this.getReaderList()
+      this.getBookList()
+    },
+    methods: {
+      getReaderList() {
+        axios({
+          url: '/reader',
+          method: 'get',
+          params: this.queryForm
+        }).then(res => {
+          if (res.status === 200 && res.data.code === 200) {
+            this.readerList = res.data.data.page.content
+            this.total = res.data.data.page.totalElements
+          }
+        })
+      },
+      getBookList() {
+        axios({
+          url: '/book',
+          method: 'get',
+          params: {pageNo: 1, pageSize: 1000}
+        }).then(res => {
+          if (res.status === 200 && res.data.code === 200) {
+            this.bookList = res.data.data.page.content
+          }
+        })
+      },
+      getReader(id) {
+        axios({
+          url: `/reader/${id}`,
+          method: 'get'
+        }).then(res => {
+          if (res.status === 200 && res.data.code === 200) {
+            this.addOrEditForm.data = {
+              ...res.data.data.reader,
+              bookIds: res.data.data.reader.books.map(item => item.id)
+            }
+          }
+        })
+      },
+      showAdd() {
+        this.addOrEditForm.visible = true
+        this.addOrEditForm.title = '添加读者'
+        this.$nextTick(() => {
+          this.$refs.addOrEditRef.resetFields()
+        })
+      },
+      showEdit(id) {
+        this.addOrEditForm.visible = true
+        this.addOrEditForm.title = '编辑读者'
+        this.$nextTick(() => {
+          this.$refs.addOrEditRef.resetFields()
+        })
+        this.getReader(id)
+      },
+      handleSubmit() {
+        this.$refs.addOrEditRef.validate(valid => {
+          if (!valid) return
+          axios({
+            url: '/reader',
+            method: 'post',
+            data: this.addOrEditForm.data
+          }).then(res => {
+            if (res.status === 200 && res.data.code === 200) {
+              this.$message.success(res.data.msg)
+              this.addOrEditForm.visible = false
+            } else {
+              this.$message.error(res.data.msg)
+            }
+            this.getReaderList()
+          })
+        })
+      },
+      handleDelete(id) {
+        axios({
+          url: '/reader',
+          method: 'delete',
+          params: {ids: id}
+        }).then(res => {
+          if (res.status === 200 && res.data.code === 200) {
+            this.$message.success(res.data.msg)
+          } else {
+            this.$message.error(res.data.msg)
+          }
+          this.getReaderList()
+        })
+      }
+    }
+  })
+</script>
+</html>
