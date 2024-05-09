@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
-public class SQLExceptionHandler {
+public class GlobalExceptionHandler {
   @ExceptionHandler(value = SQLException.class)
   public R handleSQLException(SQLException e) {
     return R.error("发生SQL异常：" + e.getMessage());

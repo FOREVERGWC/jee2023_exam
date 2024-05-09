@@ -115,15 +115,23 @@
           }
         })
       },
-      showAdd() {
+      resetAddOrEditForm() {
         this.addOrEditForm.visible = true
+        this.addOrEditForm.data = {
+          id: null,
+          name: ''
+        }
+      },
+      showAdd() {
+        this.resetAddOrEditForm()
         this.addOrEditForm.title = '添加类别'
         this.$nextTick(() => {
           this.$refs.addOrEditRef.resetFields()
+          console.log(this.addOrEditForm.data)
         })
       },
       showEdit(id) {
-        this.addOrEditForm.visible = true
+        this.resetAddOrEditForm()
         this.addOrEditForm.title = '编辑类别'
         this.$nextTick(() => {
           this.$refs.addOrEditRef.resetFields()

@@ -117,7 +117,6 @@
             name: '',
             categoryId: null,
             cover: '',
-            img: '',
             price: null,
             profile: ''
           }
@@ -177,15 +176,26 @@
           }
         })
       },
-      showAdd() {
+      resetAddOrEditForm() {
         this.addOrEditForm.visible = true
+        this.addOrEditForm.data = {
+          id: null,
+          name: '',
+          categoryId: null,
+          cover: '',
+          price: null,
+          profile: ''
+        }
+      },
+      showAdd() {
+        this.resetAddOrEditForm()
         this.addOrEditForm.title = '添加图书'
         this.$nextTick(() => {
           this.$refs.addOrEditRef.resetFields()
         })
       },
       showEdit(id) {
-        this.addOrEditForm.visible = true
+        this.resetAddOrEditForm()
         this.addOrEditForm.title = '编辑图书'
         this.$nextTick(() => {
           this.$refs.addOrEditRef.resetFields()

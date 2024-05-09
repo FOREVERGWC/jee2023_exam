@@ -133,15 +133,23 @@
           }
         })
       },
-      showAdd() {
+      resetAddOrEditForm() {
         this.addOrEditForm.visible = true
+        this.addOrEditForm.data = {
+          id: null,
+          name: '',
+          bookIds: []
+        }
+      },
+      showAdd() {
+        this.resetAddOrEditForm()
         this.addOrEditForm.title = '添加读者'
         this.$nextTick(() => {
           this.$refs.addOrEditRef.resetFields()
         })
       },
       showEdit(id) {
-        this.addOrEditForm.visible = true
+        this.resetAddOrEditForm()
         this.addOrEditForm.title = '编辑读者'
         this.$nextTick(() => {
           this.$refs.addOrEditRef.resetFields()
